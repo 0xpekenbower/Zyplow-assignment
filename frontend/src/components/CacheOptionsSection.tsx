@@ -2,15 +2,14 @@
 
 // import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Check, Github, User, Clock, Database, Code, BarChart, FileJson, Wifi, LineChart, Users, UserCircle } from "lucide-react";
+import { Check, MemoryStick, Clock, Database, Code, BarChart, FileJson, Wifi, LineChart, Users, UserCircle } from "lucide-react";
 
-// ** GitHub Icon Deprecated !! **
-// TODO: More Description Content (0 Creative Ideas)
-const LoginOptions = [
+// TODO: More Description Content (0 Creative Ideas) (No Auth : Options Are With Redis Cache & Without Redis Cache)
+const CacheOptions = [
   {
-    name: "Login",
-    description: "Login with GitHub to get More Features",
-    icon: <Github className="h-8 w-8 text-primary" />,
+    name: "Redis Cache",
+    description: "You Experience Using Redis Cache",
+    icon: <MemoryStick className="h-8 w-8 text-primary" />,
     features: [
       { text: "All Features", icon: <Check className="h-5 w-5" /> },
       { text: "Unlimited Data Retention", icon: <Database className="h-5 w-5" /> },
@@ -22,14 +21,14 @@ const LoginOptions = [
       { text: "Compare With Other Users", icon: <Users className="h-5 w-5" /> },
       { text: "User Profile", icon: <UserCircle className="h-5 w-5" /> },
     ],
-    buttonText: "Login with GitHub",
+    buttonText: "Enable Redis Cache",
     buttonVariant: "default" as const,
     highlighted: true,
   },
   {
-    name: "Guest",
-    description: "Use It As A Guest (Limited Features)",
-    icon: <User className="h-8 w-8 text-muted-foreground" />,
+    name: "Without Redis Cache",
+    description: "You Experience Without Using Redis Cache",
+    icon: <MemoryStick className="h-8 w-8 text-muted-foreground" />,
     features: [
       { text: "Leaderboard for 3 Countries", icon: <Users className="h-5 w-5" /> },
       { text: "Less Data Retention", icon: <Clock className="h-5 w-5" /> },
@@ -39,7 +38,7 @@ const LoginOptions = [
       { text: "No Comparison With Other Users", icon: <Users className="h-5 w-5" /> },
       { text: "No User Profile", icon: <UserCircle className="h-5 w-5" /> }
     ],
-    buttonText: "Use It As A Guest",
+    buttonText: "Disable Redis Cache",
     buttonVariant: "outline" as const,
     highlighted: false,
   },
@@ -47,9 +46,8 @@ const LoginOptions = [
 
 /**
  * This component is used to display the login options
- * TODO: Register App (thinking about time LOOOL) 
  */
-export default function AuthOptions() {
+export default function CacheOptionsSection() {
   return (
     // <div className="py-20 w-full bg-gradient-to-b from-background to-muted/30">
     <div className="py-20 w-full bg-background">
@@ -57,12 +55,12 @@ export default function AuthOptions() {
         <div className="text-center space-y-4 mb-12">
           <h2 className="text-4xl font-bold tracking-tight">Choose Your Experience</h2>
           <p className="text-muted-foreground max-w-lg mx-auto text-lg">
-            Select the option that best suits your needs
+            Move Between Options To Get The See Difference Between Them
           </p>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          {LoginOptions.map((plan) => (
+          {CacheOptions.map((plan) => (
             <Card 
               key={plan.name} 
               className={`flex flex-col transition-all duration-300 hover:shadow-xl ${
