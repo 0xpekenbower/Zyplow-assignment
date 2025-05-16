@@ -4,12 +4,12 @@ import Link from "next/link";
 import { ModeToggle } from "@/components/mode-toggle";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { ApiMetrics } from "@/components/metrics/api-metrics";
 
 
 const headerTabs = [
   { label: "Home", id: "home", path: "/" },
   { label: "Leaderboard", id: "leaderboard", path: "/leaderboard" },
-  { label: "Analytics", id: "analytics", path: "/analytics" },
   { label: "Search", id: "search", path: "/search" },
 ];
 
@@ -41,7 +41,8 @@ export default function Header() {
                 </span>
             </div>
           </div>
-          <div className="hidden items-center gap-2 sm:flex">
+          <div className="flex items-center gap-2">
+            <ApiMetrics />
             <ModeToggle />
           </div>
         </div>

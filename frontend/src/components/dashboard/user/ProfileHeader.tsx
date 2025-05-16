@@ -49,7 +49,7 @@ export function ProfileHeader({ profile }: ProfileHeaderProps) {
               <span>GitHub</span>
             </a>
             <Link 
-              href="/Search" 
+              href="/search" 
               className="inline-flex items-center gap-2 px-4 py-2 bg-muted text-card-foreground rounded-lg hover:bg-muted/90 transition-colors"
             >
               Back

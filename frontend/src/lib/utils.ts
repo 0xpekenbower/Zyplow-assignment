@@ -5,7 +5,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-const VALID_LOCATIONS = ["Morocco", "France", "USA", "Spain", "Italy", "Germany", "Portugal", "Brazil"]
+const VALID_LOCATIONS = ["Morocco", "France", "USA", "Spain", "Italy", "Germany", "Brazil", "Canada", "India", "China", "Japan"]
 const VALID_SORTS = ["followers", "repositories"]
 export function validateUserInput(per_page: number, page: number, location: string, sort: string) {
     if (per_page == 0 || per_page > 100)

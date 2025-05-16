@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { useParams } from "next/navigation"
 import { getUserProfile } from "@/lib/endpoints/UserProfile"
 import { UserProfile, RepoSummary } from "@/types"
@@ -10,7 +10,8 @@ import { LanguageChart } from "@/components/dashboard/user/LanguageChart"
 import { RepoGrid } from "@/components/dashboard/user/RepoGrid"
 import Link from "next/link"
 import { PageContent } from "@/components/page-title-content"
-
+import { useRedisCache } from "@/hooks/useCache"
+import { ProfileResponse } from "@/lib/endpoints/UserProfile"
 
 export default function UserProfilePage() {
   const { username } = useParams()
@@ -18,6 +19,14 @@ export default function UserProfilePage() {
   const [repos, setRepos] = useState<RepoSummary[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [isCached, setIsCached] = useState(false)
+  const redisCache = useRedisCache()
+  const redisCacheRef = useRef(redisCache)
+
+  // Update the ref when redisCache changes
+  useEffect(() => {
+    redisCacheRef.current = redisCache
+  }, [redisCache])
 
   useEffect(() => {
     async function fetchUserProfile() {
@@ -25,10 +34,29 @@ export default function UserProfilePage() {
       
       try {
         setLoading(true)
+        
+        // First try to get data from Redis cache
+        const cachedData = await redisCacheRef.current.getCachedUserProfile(username as string);
+        
+        if (cachedData) {
+          console.log('Using cached user profile data');
+          const typedData = cachedData as ProfileResponse;
+          setProfile(typedData.profile);
+          setRepos(typedData.repos);
+          setIsCached(true);
+          setLoading(false);
+          return;
+        }
+        
+        // If not in cache, fetch from API
         const response = await getUserProfile(username as string)
         setProfile(response.profile)
         setRepos(response.repos)
         setError(null)
+        setIsCached(false)
+        
+        // Cache the data for future use
+        await redisCacheRef.current.cacheUserProfile(username as string, response);
       } catch (err) {
         setError("Failed to load user profile")
         console.error(err)
@@ -72,6 +100,12 @@ export default function UserProfilePage() {
   return (
     <PageContent>
       <div className="max-w-6xl mx-auto space-y-8">
+        {isCached && (
+          <div className="bg-blue-50 text-blue-800 px-4 py-2 rounded-md text-sm">
+            Loaded from cache
+          </div>
+        )}
+        
         <div className="bg-card rounded-xl p-6 shadow-sm border border-border">
           <ProfileHeader profile={profile} />
         </div>

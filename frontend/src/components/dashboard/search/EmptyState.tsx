@@ -13,7 +13,7 @@ export function EmptyState() {
       </h3>
       <p className="text-muted-foreground max-w-md mb-6">
         Find GitHub users by username, full name, or keywords. You can view detailed profiles and repositories. 
-        Check This User dspinellis it's Give Display  
+        Check This User dspinellis it&apos;s Give Display  
       </p>
     </div>
   )

@@ -20,14 +20,9 @@ export default function Leaderboard() {
                 <SelectValue placeholder="Select a country" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Morocco">Morocco</SelectItem>
-                <SelectItem value="USA">USA</SelectItem>
-                <SelectItem value="France">France</SelectItem>
-                <SelectItem value="Spain">Spain</SelectItem>
-                <SelectItem value="Italy">Italy</SelectItem>
-                <SelectItem value="Germany">Germany</SelectItem>
-                <SelectItem value="Portugal">Portugal</SelectItem>
-                <SelectItem value="Brazil">Brazil</SelectItem>
+                {["Morocco", "USA", "France", "Spain", "Italy", "Germany", "Brazil", "Canada", "India", "China", "Japan"].map((country) => (
+                  <SelectItem key={country} value={country}>{country}</SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </TabsList>

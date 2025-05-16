@@ -4,37 +4,11 @@ import { CardContent } from "@/components/ui/card"
 import { useLeaderboard } from "@/hooks/useLeaderboard"
 import { JSX } from "react"
 import Image from "next/image"
-/**
- * Map the id to the selector values Preventing User from Sending Dirty Data to the Server
- * TODO: Optimize this by using a single function to map the id to the selector values (Deprecate moving to validateUserInput)
- */
-// const FromIdToSelectors = {
-//     "location": {
-//         "1": "Morocco",
-//         "2": "France"
-//     },
-//     "sort": {
-//         "1": "followers",
-//         "2": "repositories"
-//     },
-//     "per_page": {
-//         "1": 10,
-//         "2": 50,
-//         "3": 100
-//     },
-//     "page": {
-//         "1": 1,
-//         "2": 2,
-//         "3": 3,
-//         "4": 4,
-//         "5": 5,
-//         "6": 6,
-//         "7": 7,
-//         "8": 8,
-//         "9": 9,
-//         "10": 10
-//     }
-// }
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { ExternalLink, User } from "lucide-react"
+import Link from "next/link"
+
 
 
 /**
@@ -43,12 +17,13 @@ import Image from "next/image"
  * @returns The leaderboard component with exactly 8 users and internal scrolling
  */
 export function GetLeaderboard({ location, sort }: { location: string, sort: string }): JSX.Element {
-    const { Leaderboard, isLoading, error} = useLeaderboard({
+    const { Leaderboard, isLoading, error, isCached, refetch } = useLeaderboard({
         location: location,
         sort: sort,
         per_page: 100,
         page: 1
     })
+    
     if (isLoading) {
         return <div className="flex justify-center items-center h-[calc(100vh-250px)] text-muted-foreground">Loading users...</div>
     }
@@ -60,9 +35,22 @@ export function GetLeaderboard({ location, sort }: { location: string, sort: str
     if (!Leaderboard || !Leaderboard.items || Leaderboard.items.length === 0) {
         return <div className="h-[calc(100vh-250px)] flex items-center justify-center text-muted-foreground">No users found</div>
     }
+    
     return (
       // Here im Trying to Make it More Responsive Also Avoiding (Lote Of Request For Avatar, Small Optimization) 
       <CardContent className="h-[60vh] w-full relative inset-0 overflow-y-auto no-scrollbar rounded-md">
+          {isCached && (
+            <div className="mb-4 flex justify-between items-center">
+              <Badge variant="outline" className="bg-blue-50 text-blue-800 hover:bg-blue-100">Loaded from cache</Badge>
+              <button 
+                onClick={() => refetch()} 
+                className="text-xs text-muted-foreground hover:text-foreground underline"
+              >
+                Refresh
+              </button>
+            </div>
+          )}
+          
           <div className="space-y-4">
               {Leaderboard.items.map((user) => (
                   <div 
@@ -83,6 +71,20 @@ export function GetLeaderboard({ location, sort }: { location: string, sort: str
                       <div>
                         <div className="font-medium text-card-foreground">{user.login}</div>
                       </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button variant="outline" size="sm" asChild>
+                        <Link href={`/User/${user.login}`}>
+                          <User className="h-4 w-4 mr-1" />
+                          Profile
+                        </Link>
+                      </Button>
+                      <Button variant="outline" size="sm" asChild>
+                        <a href={`https://github.com/${user.login}`} target="_blank" rel="noopener noreferrer">
+                          <ExternalLink className="h-4 w-4 mr-1" />
+                          GitHub
+                        </a>
+                      </Button>
                     </div>
                   </div>
               ))}

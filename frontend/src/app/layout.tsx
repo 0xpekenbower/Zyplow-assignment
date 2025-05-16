@@ -23,14 +23,14 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <Header />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
-        <main className="flex-1">{children}</main>
+          <Header />
+          <main className="flex-1">{children}</main>
         </ThemeProvider>
         <Footer />
       </body>

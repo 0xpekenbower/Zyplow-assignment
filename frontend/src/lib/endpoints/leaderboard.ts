@@ -11,7 +11,6 @@ export async function getLeaderboard(req: LeaderboardRequest): Promise<Leaderboa
     
     try {
         const data = await fetchFromGitHub<Leaderboard>(endpoint);
-        // Create leaderboard users
         const leaderboardUsers: LeaderboardUser[] = data?.items?.map((user: LeaderboardUser, index: number) => ({
             id: user.id,
             login: user.login,
