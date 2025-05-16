@@ -1,16 +1,19 @@
-import React from 'react';
+import LandingLayout from "@/components/layout/landing-layout";
+import LandingTitle from "@/components/landing/title";
+import AuthOptions from "@/components/AuthOptions";
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
-        <h1 className="text-6xl font-bold">
-          Zyplow Assignment
-        </h1>
-        <p className="mt-3 text-2xl">
-          init the project
-        </p>
-      </main>
-    </div>
+    <LandingLayout>
+      <div className="flex justify-center pt-24">
+        <div className="flex flex-col items-center">
+          <LandingTitle />
+          <div className="p-2 text-center text-sm text-muted-foreground">
+            Tracking GitHub Users Activity And Visualizing It
+          </div>
+        </div>
+      </div>
+      <AuthOptions />
+    </LandingLayout>
   );
-}
+} 

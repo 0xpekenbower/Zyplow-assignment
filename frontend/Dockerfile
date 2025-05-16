@@ -2,7 +2,7 @@ ARG FRONTEND_ENV=prod
 FROM node:23-slim AS base
 WORKDIR /app
 COPY package*.json ./
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 
 FROM base AS dev
