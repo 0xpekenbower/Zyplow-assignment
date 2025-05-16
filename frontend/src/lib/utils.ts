@@ -53,8 +53,9 @@ export function extractProfileAndRepos(data: DataResponse): { profile: UserProfi
     }))
   };
   
-  const owned = data.repositories || [];
-  const contributed = data.repositoriesContributedTo || [];
+  // Filter out null repositories before processing
+  const owned = (data.repositories || []).filter(repo => repo !== null);
+  const contributed = (data.repositoriesContributedTo || []).filter(repo => repo !== null);
   const allRepos = [...owned, ...contributed];
   
   let totalStars = 0;
@@ -65,6 +66,8 @@ export function extractProfileAndRepos(data: DataResponse): { profile: UserProfi
   const userLogin = user.login || '';
   
   const repoSummaries = allRepos.map(repo => {
+    if (!repo) return null;
+    
     const languages = repo.languages?.edges
       ? repo.languages.edges.map(edge => ({
           name: edge.node.name || '',
@@ -80,9 +83,11 @@ export function extractProfileAndRepos(data: DataResponse): { profile: UserProfi
       licenseName: repo.licenseInfo?.name || '',
       languages
     };
-  });
+  }).filter(Boolean) as RepoSummary[]; // Filter out any null values that might have been created (TODO: Optimize this)
   
   for (const repo of allRepos) {
+    if (!repo) continue; // Skip null repositories
+    
     totalStars += repo.stargazerCount || 0;
     totalForks += repo.forkCount || 0;
     

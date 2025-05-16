@@ -50,43 +50,43 @@ export function GetLeaderboard({ location, sort }: { location: string, sort: str
         page: 1
     })
     if (isLoading) {
-        return <div className="flex justify-center items-center h-[calc(100vh-250px)]">Loading users...</div>
+        return <div className="flex justify-center items-center h-[calc(100vh-250px)] text-muted-foreground">Loading users...</div>
     }
     
     if (error) {
-        return <div className="h-[calc(100vh-250px)] flex items-center justify-center">Error: {error instanceof Error ? error.message : "Unknown error"}</div>
+        return <div className="h-[calc(100vh-250px)] flex items-center justify-center text-destructive">Error: {error instanceof Error ? error.message : "Unknown error"}</div>
     }
     
     if (!Leaderboard || !Leaderboard.items || Leaderboard.items.length === 0) {
-        return <div className="h-[calc(100vh-250px)] flex items-center justify-center">No users found</div>
+        return <div className="h-[calc(100vh-250px)] flex items-center justify-center text-muted-foreground">No users found</div>
     }
     return (
-            <CardContent className="h-[60vh] w-full relative inset-0 overflow-y-auto no-scrollbar">
-                <div className="space-y-4">
-                    {Leaderboard.items.map((user) => (
-                        <div 
-                          key={user.id}
-                          className="flex items-center justify-between border-b border-muted pb-3 last:border-0"
-                        >
-                          <div className="flex items-center gap-3">
-                            <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center">
-                                {user.rank}
-                            </div>
-                            <Image
-                              src={user.avatar_url} 
-                              alt={user.login}
-                            //   className="h-16 w-16 sm:h-20 sm:w-20 rounded-full"
-                              width={80}
-                              height={80}
-                              className="rounded-full"
-                            />
-                            <div>
-                              <div className="font-medium">{user.login}</div>
-                            </div>
-                          </div>
-                        </div>
-                    ))}
-                </div>
-            </CardContent>
+      // Here im Trying to Make it More Responsive Also Avoiding (Lote Of Request For Avatar, Small Optimization) 
+      <CardContent className="h-[60vh] w-full relative inset-0 overflow-y-auto no-scrollbar rounded-md">
+          <div className="space-y-4">
+              {Leaderboard.items.map((user) => (
+                  <div 
+                    key={user.id}
+                    className="flex items-center justify-between border-b border-border rounded-md pb-3 last:border-0 hover:bg-muted/50 p-2 transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center text-muted-foreground font-medium">
+                          {user.rank}
+                      </div>
+                      <Image
+                        src={user.avatar_url} 
+                        alt={user.login}
+                        width={80}
+                        height={80}
+                        className="rounded-full ring-2 ring-border"
+                      />
+                      <div>
+                        <div className="font-medium text-card-foreground">{user.login}</div>
+                      </div>
+                    </div>
+                  </div>
+              ))}
+          </div>
+      </CardContent>
     )
 }

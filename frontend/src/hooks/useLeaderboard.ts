@@ -28,8 +28,6 @@ export function useLeaderboard({ location, sort, per_page, page }: UseLeaderboar
         
         try {
             validateUserInput(per_page, page, location, sort);
-            
-            // Create a request object to pass to getLeaderboard
             const request: LeaderboardRequest = {
                 location,
                 sort,
