@@ -19,7 +19,7 @@ export default function Leaderboard() {
           <TabsList>
             <TabsTrigger value="Followers" onClick={() => setSort("followers")}>Followers</TabsTrigger>
             <TabsTrigger value="Repositories" onClick={() => setSort("repositories")}>Repositories</TabsTrigger>
-            <Select onValueChange={(value) => setLocation(value)}>
+            <Select defaultValue="Morocco" onValueChange={(value) => setLocation(value)}>
               <SelectTrigger>
                 <SelectValue placeholder="Select a country" />
               </SelectTrigger>

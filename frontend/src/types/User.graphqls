@@ -1,0 +1,51 @@
+query GetUser($login: String!) {
+  user(login: $login) {
+    login
+    name
+    url
+    avatarUrl
+    bio
+    company
+    location
+    email
+    websiteUrl
+    twitterUsername
+    pronouns
+    createdAt
+    updatedAt
+    followers { totalCount }
+    following { totalCount }
+    organizations(first: 100) {
+      nodes {
+        login
+        name
+        avatarUrl
+        url
+        description
+        websiteUrl
+      }
+    }
+    repositories(first: 100, isFork: false) {
+      nodes {
+        name
+        stargazerCount
+        forkCount
+        licenseInfo { name }
+        languages(first: 10, orderBy: {field: SIZE, direction: DESC}) {
+          edges { size node { name } }
+        }
+      }
+    }
+    repositoriesContributedTo(first: 100) {
+      nodes {
+        name
+        stargazerCount
+        forkCount
+        licenseInfo { name }
+        languages(first: 10, orderBy: {field: SIZE, direction: DESC}) {
+          edges { size node { name } }
+        }
+      }
+    }
+  }
+}

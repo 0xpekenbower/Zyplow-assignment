@@ -19,8 +19,6 @@ export async function getLeaderboard(req: LeaderboardRequest): Promise<Leaderboa
             html_url: user.html_url,
             rank: index + 1
         })) || [];
-        
-        // Create and return leaderboard with all required properties
         return {
             total_count: data?.total_count || 0,
             items: leaderboardUsers,

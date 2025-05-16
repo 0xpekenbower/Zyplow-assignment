@@ -75,9 +75,10 @@ export function GetLeaderboard({ location, sort }: { location: string, sort: str
                             <Image
                               src={user.avatar_url} 
                               alt={user.login}
-                              className="h-16 w-16 sm:h-20 sm:w-20 rounded-full"
+                            //   className="h-16 w-16 sm:h-20 sm:w-20 rounded-full"
                               width={80}
                               height={80}
+                              className="rounded-full"
                             />
                             <div>
                               <div className="font-medium">{user.login}</div>

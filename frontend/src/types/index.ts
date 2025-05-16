@@ -1,4 +1,3 @@
-
 /** ----------------------------------- **/
 
 /**
@@ -46,4 +45,174 @@ export interface LeaderboardRequest {
 	sort?: string
 	per_page?: number
 	page?: number
+}
+
+
+/** ---------------User Page----------------- **/
+
+export interface Organization {
+	login: string
+	name: string
+	avatarUrl: string
+	url: string
+	description: string
+	websiteUrl: string
+}
+  
+  export interface LanguageStat {
+	name: string
+	size: number
+}
+  
+  export interface LicenseStat {
+	name: string
+	count: number
+}
+
+export interface RepoSummary {
+	name: string
+	url: string
+	stargazerCount: number
+	forkCount: number
+	licenseName: string
+	languages: LanguageStat[]
+}
+
+export interface ProfileOverview {
+	totalStars: number
+	totalForks: number
+	languageBreakdown: LanguageStat[]
+	licenseBreakdown: LicenseStat[]
+	totalLangSize: number
+}
+export interface UserProfile {
+	login: string
+	name: string
+	url: string
+	avatarUrl: string
+	bio: string
+	company: string
+	location: string
+	email: string
+	websiteUrl: string
+	twitterUsername: string
+	pronouns: string
+	createdAt: string
+	updatedAt: string
+	followers: number
+	following: number
+	organizations: Organization[]
+	overview: ProfileOverview
+}
+
+/**
+ * GraphQL Query For User Profile
+ * @ref : https://docs.github.com/en/graphql/reference/objects#user
+ */
+export const PROFILE_QUERY = `
+query($login: String!) {
+  user(login: $login) {
+    login
+    name
+    url
+    avatarUrl
+    bio
+    company
+    location
+    email
+    websiteUrl
+    twitterUsername
+    pronouns
+    createdAt
+    updatedAt
+    followers { totalCount }
+    following { totalCount }
+    organizations(first: 100) {
+      nodes {
+        login
+        name
+        avatarUrl
+        url
+        description
+        websiteUrl
+      }
+    }
+    repositories(first: 100, isFork: false) {
+      nodes {
+        name
+        stargazerCount
+        forkCount
+        licenseInfo { name }
+        languages(first: 10, orderBy: {field: SIZE, direction: DESC}) {
+          edges { size node { name } }
+        }
+      }
+    }
+    repositoriesContributedTo(first: 100) {
+      nodes {
+        name
+        stargazerCount
+        forkCount
+        licenseInfo { name }
+        languages(first: 10, orderBy: {field: SIZE, direction: DESC}) {
+          edges { size node { name } }
+        }
+      }
+    }
+  }
+}`;
+
+
+export interface UserDetailsType {
+	login: string
+	name: string
+	url: string
+	avatarUrl: string
+	bio: string | null
+	company: string | null
+	location: string | null
+	email: string | null
+	websiteUrl: string | null
+	twitterUsername: string | null
+	pronouns: string | null
+	createdAt: string
+	updatedAt: string
+	followers: { totalCount: number }
+	following: { totalCount: number }
+	organizations?: { nodes: OrganizationsType[] }
+	repositories?: { nodes: RepositoryType[] }
+	repositoriesContributedTo?: { nodes: RepositoryType[] }
+}
+
+export interface OrganizationsType {
+	login: string | null
+	name: string | null
+	avatarUrl: string | null
+	url: string | null
+	description: string | null
+	websiteUrl: string | null
+}
+
+export interface LanguageEdge {
+	size: number
+	node: {
+		name: string
+	}
+}
+
+export interface RepositoryType {
+	name: string
+	stargazerCount: number
+	forkCount: number
+	licenseInfo: { name: string } | null
+	languages: {
+		edges: LanguageEdge[]
+	} | null
+}
+
+export interface DataResponse {
+    user: UserDetailsType,
+    organizations: OrganizationsType[],
+    repositories: RepositoryType[],
+    repositoriesContributedTo: RepositoryType[]
 }

@@ -1,5 +1,9 @@
 const GITHUB_API_URL = "https://api.github.com";
+const GITHUB_GRAPHQL_URL = "https://api.github.com/graphql";
 const GITHUB_TOKEN = process.env.NEXT_PUBLIC_GITHUB_TOKEN;
+import { PROFILE_QUERY, DataResponse } from "@/types"
+
+
 
 /**
  * Fetch Data From GitHub API
@@ -24,4 +28,38 @@ export async function fetchFromGitHub<T>(endpoint: string): Promise<T> {
   }
 	console.log(response);
   return response.json() as Promise<T>;
+}
+
+/**
+ * Fetch Data From GitHub GraphQL API
+ * @param query : GitHub GraphQL Query
+ * @returns : Data From GitHub GraphQL API
+ */
+export async function fetchFromGitHubGraphQL(username: string): Promise<DataResponse> {
+	const headers: HeadersInit = {
+		"Content-Type": "application/json",
+		"Accept": "application/json",
+		"Authorization": `Bearer ${GITHUB_TOKEN}`
+	}
+	const response = await fetch(GITHUB_GRAPHQL_URL, {
+		method: "POST",
+		headers,
+		body: JSON.stringify({ query: PROFILE_QUERY, variables: { login: username } })
+	});
+	if (!response.ok) {
+		throw new Error(`HTTP error! status: ${response.status}`);
+	}
+	
+	const data = await response.json();
+	
+	if (data.errors) {
+		throw new Error(`GraphQL error: ${data.errors[0].message}`);
+	}
+	
+	return {
+		user: data.data.user,
+		organizations: data.data.user.organizations?.nodes || [],
+		repositories: data.data.user.repositories?.nodes || [],
+		repositoriesContributedTo: data.data.user.repositoriesContributedTo?.nodes || []
+	};
 }
